@@ -1,0 +1,625 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Il Quaderno di Francese</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: una sola colonna-quaderno su carta a righe francesi (Seyès); blu = UN, rosa = UNE come nelle mappe */
+:root{
+  --paper:#f5f7fc; --sheet:#ffffff; --ink:#1c2342; --muted:#596285;
+  --rule:#e3eaf6; --rule-strong:#cdd9ef; --margin:#e2675c;
+  --bleu:#2853c9; --bleu-soft:#e6ecfb; --rose:#c43a70; --rose-soft:#fbe6ef;
+  --ok:#1f7f53; --ok-soft:#ddf3e7; --ko:#a85a14; --ko-soft:#fcefdf;
+  --line:#dde3f0;
+  --f-display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Lexend",Verdana,system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#121829; --sheet:#1b2238; --ink:#eaeef9; --muted:#a6afcb;
+  --rule:#1a2136; --rule-strong:#222b45; --margin:#f0857a;
+  --bleu:#86a6ff; --bleu-soft:#22305a; --rose:#ff92bb; --rose-soft:#4a2338;
+  --ok:#6fd6a3; --ok-soft:#173a2b; --ko:#ffb874; --ko-soft:#43301b;
+  --line:#2c3552; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#121829; --sheet:#1b2238; --ink:#eaeef9; --muted:#a6afcb;
+  --rule:#1a2136; --rule-strong:#222b45; --margin:#f0857a;
+  --bleu:#86a6ff; --bleu-soft:#22305a; --rose:#ff92bb; --rose-soft:#4a2338;
+  --ok:#6fd6a3; --ok-soft:#173a2b; --ko:#ffb874; --ko-soft:#43301b;
+  --line:#2c3552; color-scheme:dark }
+
+html{font-size:100%}
+html.big{font-size:118%}
+body{
+  background-color:var(--paper); color:var(--ink);
+  background-image:
+    linear-gradient(var(--rule-strong) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule-strong) 1px, transparent 1px),
+    linear-gradient(var(--rule) 1px, transparent 1px);
+  background-size:32px 32px, 32px 32px, 100% 8px;
+  font-family:var(--f-body); font-size:1.0625rem; line-height:1.6; letter-spacing:.01em;
+}
+.wrap{max-width:780px; margin:0 auto; padding-block:20px 56px;
+  padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px));
+  display:flex; flex-direction:column; gap:20px}
+button{font:inherit; color:inherit; cursor:pointer}
+button:focus-visible{outline:3px solid var(--bleu); outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display); line-height:1.15; text-wrap:balance; margin:0}
+
+/* testata */
+.top{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:12px 20px}
+.brand{display:flex; flex-direction:column; gap:2px; min-width:0}
+.brand h1{font-size:2.1rem; font-weight:800; cursor:pointer}
+.brand h1 .fr-flag{display:inline-flex; gap:0; vertical-align:middle; margin-left:6px; border-radius:3px; overflow:hidden; height:.55em}
+.brand h1 .fr-flag i{width:.35em; display:block}
+.brand p{margin:0; color:var(--muted); font-size:.95rem}
+.toggles{display:flex; gap:8px; flex-wrap:wrap}
+.tog{border:1.5px solid var(--line); background:var(--sheet); border-radius:999px; padding:6px 14px; font-size:.9rem; display:inline-flex; align-items:center; gap:8px}
+.tog[aria-pressed="true"]{border-color:var(--bleu); background:var(--bleu-soft); color:var(--bleu); font-weight:600}
+.tog .dot{width:10px; height:10px; border-radius:50%; border:2px solid currentColor}
+.tog[aria-pressed="true"] .dot{background:currentColor}
+
+/* home */
+.intro{background:var(--sheet); border-radius:14px; padding:16px 18px; border:1px solid var(--line); display:flex; gap:14px; align-items:center}
+.intro p{margin:0}
+.topics{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+@media (max-width:560px){.topics{grid-template-columns:1fr}}
+.topic{background:var(--sheet); border:1px solid var(--line); border-radius:16px; padding:18px; text-align:left; display:grid; grid-template-columns:auto 1fr; gap:4px 16px; align-items:center; transition:transform .15s}
+.topic:hover{transform:translateY(-2px)}
+.topic .tag{grid-row:span 3; width:76px; height:76px; border-radius:14px; display:grid; place-items:center; font-family:var(--f-display); font-weight:800; font-size:1.35rem; line-height:1; text-align:center; background:var(--bleu-soft); color:var(--bleu)}
+.topic:nth-child(2) .tag{font-size:2rem}
+.topic:nth-child(2n) .tag{background:var(--rose-soft); color:var(--rose)}
+.topic h2{font-size:1.45rem}
+.topic .sub{color:var(--muted); font-size:.92rem; line-height:1.4}
+.topic .meta{font-size:.82rem; color:var(--muted); display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+
+/* pagina argomento */
+.back{align-self:flex-start; background:none; border:none; padding:4px 0; color:var(--bleu); font-weight:600}
+.head h2{font-size:2rem}
+.head p{margin:2px 0 0; color:var(--muted)}
+.games{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px}
+.game{background:var(--bleu); color:#fff; border:none; border-radius:14px; padding:14px 16px; text-align:left; display:flex; flex-direction:column; gap:2px}
+.game:nth-child(2){background:var(--rose)}
+.game:nth-child(3){background:var(--ink); color:var(--paper)}
+.game b{font-family:var(--f-display); font-size:1.25rem; font-weight:800; line-height:1.2}
+.game span{font-size:.85rem; opacity:.92; line-height:1.35}
+.game .best{margin-top:6px; display:flex; gap:2px}
+:root[data-theme="dark"] .game, :root[data-theme="dark"] .game:nth-child(2){color:#10142a}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .game:nth-child(-n+2){color:#10142a}}
+
+.sheet{background:var(--sheet); border:1px solid var(--line); border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:14px}
+.sheet-bar{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap}
+.sec h3{font-size:1.3rem; display:flex; gap:8px; align-items:baseline; flex-wrap:wrap}
+.sec h3 small{font-family:var(--f-body); font-weight:400; font-size:.9rem; color:var(--muted)}
+.sec{display:flex; flex-direction:column; gap:10px}
+.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:10px}
+.card{border:1.5px solid var(--line); border-radius:12px; padding:10px 12px; display:grid; grid-template-columns:1fr auto; gap:2px 8px; align-items:center; background:var(--sheet); min-width:0}
+.card.m{border-color:color-mix(in srgb, var(--bleu) 45%, var(--line))}
+.card.f{border-color:color-mix(in srgb, var(--rose) 45%, var(--line))}
+.card .fr{font-weight:600; font-size:1.12rem; line-height:1.35; min-width:0}
+.card .it{grid-column:1; color:var(--muted); font-size:.95rem; line-height:1.35}
+.card .hint{grid-column:1; font-size:.85rem; color:var(--muted)}
+.card .hint b{color:var(--ink); font-weight:500}
+.card .big{font-family:var(--f-display); font-weight:800; font-size:2rem; line-height:1; color:var(--bleu)}
+.card .say{grid-column:2; grid-row:1 / span 3}
+.hideit .card .it{filter:blur(6px); cursor:pointer; user-select:none}
+.hideit .card .it.show{filter:none}
+.art.m{color:var(--bleu); font-weight:700}
+.art.f{color:var(--rose); font-weight:700}
+.tag-reg{font-size:.72rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; border-radius:6px; padding:1px 6px; margin-left:4px; vertical-align:2px}
+.tag-reg.tu{background:var(--bleu-soft); color:var(--bleu)}
+.tag-reg.vous{background:var(--rose-soft); color:var(--rose)}
+.face{font-size:1.6rem; line-height:1}
+
+.say{width:44px; height:44px; border-radius:50%; border:none; background:var(--bleu-soft); color:var(--bleu); display:grid; place-items:center; flex:none}
+.say:hover{background:var(--bleu); color:var(--sheet)}
+.say svg{width:22px; height:22px}
+.say.lg{width:72px; height:72px}
+.say.lg svg{width:36px; height:36px}
+
+.tips{border:2px dashed var(--margin); border-radius:14px; padding:14px 16px; display:flex; flex-direction:column; gap:6px}
+.tips h3{font-size:1.15rem; color:var(--margin)}
+.tips ul{margin:0; padding-left:1.2em; display:flex; flex-direction:column; gap:4px}
+
+/* esercizi */
+.runner{background:var(--sheet); border:1px solid var(--line); border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:18px}
+.runner-top{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap}
+.runner-top h3{font-size:1.3rem}
+.dots{display:flex; gap:5px; flex-wrap:wrap}
+.dots i{width:12px; height:12px; border-radius:50%; background:var(--line)}
+.dots i.ok{background:var(--ok)} .dots i.ko{background:var(--ko)} .dots i.now{outline:2px solid var(--bleu); outline-offset:1px}
+.q{display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding:8px 0}
+.q .ask{color:var(--muted); font-size:.95rem}
+.q .word{font-size:1.9rem; font-weight:600; line-height:1.3}
+.q .num{font-family:var(--f-display); font-size:4.2rem; font-weight:800; line-height:1; color:var(--bleu)}
+.q .sit{font-size:1.2rem; max-width:34ch; line-height:1.5}
+.q .peek{background:none; border:1px dashed var(--line); border-radius:8px; padding:4px 10px; font-size:.85rem; color:var(--muted)}
+.opts{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+.opts.one{grid-template-columns:1fr}
+.opts.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:520px){.opts{grid-template-columns:1fr} .opts.two-big{grid-template-columns:1fr 1fr}}
+.opt{border:2px solid var(--line); background:var(--sheet); border-radius:12px; padding:14px 12px; font-size:1.1rem; font-weight:500; line-height:1.35; min-height:60px; min-width:0}
+.opt:hover:not(:disabled){border-color:var(--bleu)}
+.opt.digit{font-family:var(--f-display); font-size:2.2rem; font-weight:800; padding:6px}
+.opt.cm{border-color:var(--bleu); color:var(--bleu); font-family:var(--f-display); font-size:2rem; font-weight:800}
+.opt.cf{border-color:var(--rose); color:var(--rose); font-family:var(--f-display); font-size:2rem; font-weight:800}
+.opt.right{border-color:var(--ok); background:var(--ok-soft); color:var(--ok)}
+.opt.wrong{border-color:var(--ko); background:var(--ko-soft); color:var(--ko)}
+.opt:disabled{cursor:default}
+.opt:disabled:not(.right):not(.wrong){opacity:.55}
+.fb{border-radius:12px; padding:12px 14px; display:flex; gap:12px; align-items:center}
+.fb.ok{background:var(--ok-soft)} .fb.ko{background:var(--ko-soft)}
+.fb .msg{flex:1; min-width:0}
+.fb .msg b.t{display:block; font-family:var(--f-display); font-size:1.25rem}
+.fb.ok b.t{color:var(--ok)} .fb.ko b.t{color:var(--ko)}
+.primary{align-self:center; background:var(--bleu); color:var(--sheet); border:none; border-radius:999px; padding:12px 30px; font-weight:600; font-size:1.05rem}
+.ghost{background:none; border:2px solid var(--line); border-radius:999px; padding:10px 22px; font-weight:500}
+.row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+
+/* mattoncini */
+.build{min-height:64px; border:2px dashed var(--line); border-radius:12px; padding:10px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center}
+.build:empty::before{content:"Tocca i mattoncini qui sotto"; color:var(--muted); font-size:.9rem}
+.build.ok{border-color:var(--ok); border-style:solid; background:var(--ok-soft)}
+.build.ko{border-color:var(--ko); border-style:solid; background:var(--ko-soft)}
+.pool{display:flex; flex-wrap:wrap; gap:8px; justify-content:center}
+.brick{border:none; border-radius:10px; padding:10px 16px; font-weight:600; font-size:1.15rem; background:var(--bleu-soft); color:var(--bleu); box-shadow:0 3px 0 color-mix(in srgb, var(--bleu) 35%, transparent)}
+.brick.sym{background:var(--rose-soft); color:var(--rose); box-shadow:0 3px 0 color-mix(in srgb, var(--rose) 35%, transparent); min-width:52px}
+.brick:disabled{opacity:.3}
+.preview{font-size:1.4rem; font-weight:600; text-align:center; min-height:1.6em}
+
+/* fine */
+.end{display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center}
+.end h3{font-size:2rem}
+.stars{display:flex; gap:6px}
+.stars svg{width:46px; height:46px}
+.stars.sm svg{width:16px; height:16px}
+.mist{width:100%; display:flex; flex-direction:column; gap:8px; text-align:left}
+.mist .card{grid-template-columns:1fr auto}
+.toast{position:fixed; left:50%; transform:translateX(-50%); bottom:calc(16px + env(safe-area-inset-bottom,0px)); background:var(--ink); color:var(--paper); padding:10px 16px; border-radius:10px; font-size:.9rem; max-width:calc(100% - 32px); z-index:20}
+@media (prefers-reduced-motion: reduce){*{transition:none!important; animation:none!important}}
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.03)}100%{transform:scale(1)}}
+.opt.right{animation:pop .25s ease-out}
+</style>
+
+<div class="wrap" id="app"></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ---------- utilità ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle = a => { a = a.slice(); for (let i=a.length-1;i>0;i--){ const j=Math.random()*(i+1)|0; [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const store = {
+  get(k,d){ try{ const v=localStorage.getItem("qf_"+k); return v==null?d:JSON.parse(v); }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem("qf_"+k, JSON.stringify(v)); }catch(e){} }
+};
+const SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+const sayBtn = (txt, big) => `<button class="say${big?" lg":""}" data-say="${esc(txt)}" aria-label="Ascolta in francese">${SPK}</button>`;
+function starsHTML(n, sm){
+  let s = ""; for (let i=0;i<3;i++) s += `<svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" style="fill:${i<n?"#f2b100":"none"};stroke:${i<n?"#d99a00":"var(--muted)"}" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
+  return `<div class="stars${sm?" sm":""}" aria-label="${n} stelle su 3">${s}</div>`;
+}
+const starCount = (sc, tot) => { const p = sc/tot; return p>=.9?3:p>=.7?2:p>=.5?1:0; };
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.hidden=false; clearTimeout(toast.h); toast.h=setTimeout(()=>t.hidden=true, 3500); }
+
+/* ---------- voce francese ---------- */
+let settings = store.get("settings", {slow:false, big:false});
+let frVoice = null;
+function loadVoice(){
+  if (!("speechSynthesis" in window)) return;
+  const vs = speechSynthesis.getVoices();
+  frVoice = vs.find(v=>/^fr[-_]FR/i.test(v.lang) && /google|natural|online/i.test(v.name)) || vs.find(v=>/^fr[-_]FR/i.test(v.lang)) || vs.find(v=>/^fr/i.test(v.lang)) || null;
+}
+if ("speechSynthesis" in window){ loadVoice(); speechSynthesis.onvoiceschanged = loadVoice; }
+let warned = false;
+function speak(text){
+  if (!text) return;
+  if (!("speechSynthesis" in window)){ if(!warned){ toast("Questo browser non sa leggere ad alta voce. Prova con Chrome o Edge."); warned=true; } return; }
+  speechSynthesis.cancel();
+  const clean = text.replace(/\s\/\s/g, ". ").replace(/[()]/g, "");
+  const u = new SpeechSynthesisUtterance(clean);
+  u.lang = "fr-FR"; if (frVoice) u.voice = frVoice;
+  u.rate = settings.slow ? .6 : .88;
+  speechSynthesis.speak(u);
+  if (!frVoice && !warned){ warned = true; setTimeout(()=>{ loadVoice(); if(!frVoice) toast("Non trovo una voce francese sul computer: la pronuncia potrebbe non essere corretta."); }, 400); }
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if (b){ e.stopPropagation(); speak(b.dataset.say); } });
+
+/* ---------- DATI (dalle mappe) ---------- */
+// VOCABULAIRE
+const VOC_RAW = [
+  {t:"En classe", it:"In classe", items:[["m","tableau","la lavagna"],["m","TBI","la lavagna digitale","un té bé i"],["m","bureau","la cattedra"],["m","ordinateur","il computer"],["f","craie","il gesso"],["f","chaise","la sedia"],["f","corbeille","il cestino"],["f","fenêtre","la finestra"]]},
+  {t:"Dans mon sac à dos", it:"Nello zaino", items:[["m","sac à dos","lo zaino"],["m","cahier","il quaderno"],["m","livre","il libro"],["m","stylo","la penna"],["m","feutre","il pennarello"],["m","crayon","la matita"],["m","agenda","il diario"],["f","trousse","l'astuccio"],["f","gomme","la gomma"],["f","règle","il righello"]]},
+  {t:"Les personnes", it:"Le persone", items:[["m","garçon","un ragazzo"],["f","fille","una ragazza"],["m","élève","un alunno"],["f","élève","un'alunna"],["m","copain","un compagno"],["f","copine","una compagna"],["mf","professeur","l'insegnante","un professeur. une professeur","abbreviato: prof"]]}
+];
+const artHTML = g => g==="m" ? '<span class="art m">un</span>' : g==="f" ? '<span class="art f">une</span>' : '<span class="art m">un</span> / <span class="art f">une</span>';
+const VOC = VOC_RAW.map(s => ({ title:s.t, it:s.it, items:s.items.map(([g,w,it,say,note]) => ({
+  g, word:w, it, cls:g==="mf"?"":g,
+  fr:(g==="m"?"un ":g==="f"?"une ":"un / une ")+w,
+  html:artHTML(g)+" "+esc(w), say:say || (g==="m"?"un ":"une ")+w, hint:note||""
+}))}));
+
+// NOMBRES
+const NUM_W = ["zéro","un","deux","trois","quatre","cinq","six","sept","huit","neuf","dix","onze","douze","treize","quatorze","quinze","seize","dix-sept","dix-huit","dix-neuf","vingt","vingt et un","vingt-deux","vingt-trois","vingt-quatre","vingt-cinq","vingt-six","vingt-sept","vingt-huit","vingt-neuf","trente","trente et un"];
+const NUM_P = ["dzerò","an","dö","troà","katr","sank","sis","set","üit","növ","dis","onz","duz","trez","katorz","kanz","sez","dis-set","diz-üit","diz-növ","van","vant-e-an","vant-dö","vant-troà","vant-katr","vant-sank","vant-sis","vant-set","vant-üit","vant-növ","trant","trant-e-an"];
+const numItem = n => ({n, fr:NUM_W[n], html:esc(NUM_W[n]), it:String(n), say:NUM_W[n], hint:NUM_P[n], big:n});
+const range = (a,b) => Array.from({length:b-a+1}, (_,i)=>a+i);
+const NUM = [
+  {title:"I numeri base", it:"0 → 10", items:range(0,10).map(numItem)},
+  {title:"La famiglia “-ZE”", it:"11 → 16", items:range(11,16).map(numItem)},
+  {title:"I composti con DIX", it:"17 → 19 · 10 + numero", items:range(17,19).map(numItem)},
+  {title:"Le decine", it:"20 → 31", items:range(20,31).map(numItem)}
+];
+
+// SALUTATIONS
+const SAL = [
+  {title:"Saluer", it:"Salutare quando arrivi", items:[
+    {fr:"Salut !", it:"Ciao! (informale)", syn:"ciao", when:"both"},
+    {fr:"Bonjour, madame !", it:"Buongiorno, Signora!", when:"arr"},
+    {fr:"Bonsoir, monsieur !", it:"Buonasera, Signore!", when:"arr"}]},
+  {title:"Prendre congé", it:"Salutare quando vai via", items:[
+    {fr:"Au revoir !", it:"Arrivederci!", when:"dep"},
+    {fr:"À tout à l'heure !", it:"A tra poco!", when:"dep"},
+    {fr:"À plus tard !", it:"A più tardi!", syn:"tard", when:"dep"},
+    {fr:"Bonne journée !", it:"Buona giornata!", when:"dep"},
+    {fr:"Bonne soirée !", it:"Buona serata!", when:"dep"},
+    {fr:"Bonne nuit !", it:"Buonanotte!", when:"dep"}]},
+  {title:"Entre amis", it:"Tra amici · informale", items:[
+    {fr:"À plus !", it:"A dopo! / A più tardi!", syn:"tard", when:"dep"},
+    {fr:"Tchao !", it:"Ciao!", syn:"ciao", when:"dep"}]},
+  {title:"Les moments de la journée", it:"I momenti della giornata", items:[
+    {fr:"le matin", it:"il mattino", moment:true},
+    {fr:"l'après-midi", it:"il pomeriggio", moment:true},
+    {fr:"le soir", it:"la sera", moment:true},
+    {fr:"la nuit", it:"la notte", moment:true}]}
+];
+
+// SENSATIONS
+const tag = r => r ? `<span class="tag-reg ${r}">${r}</span>` : "";
+const SEN = [
+  {title:"Les sensations", it:"Come ti senti?", items:[
+    {fr:"Super bien ! / Très bien !", it:"Molto bene! / Super!", face:"😄", lvl:4},
+    {fr:"Bien !", it:"Bene!", face:"🙂", lvl:3},
+    {fr:"Assez bien / Pas mal", it:"Abbastanza bene / Non c'è male", face:"😐", lvl:2},
+    {fr:"Pas très bien / (Plutôt) mal", it:"Non molto bene / Male", face:"🙁", lvl:1}]},
+  {title:"Comment ça va ?", it:"Chiedere e dire come stai", items:[
+    {fr:"Ça va ? / Tu vas bien ?", it:"Come va? / Stai bene?", reg:"tu", syn:"va"},
+    {fr:"Oui, merci. Ça va bien, et toi ?", it:"Sì, grazie. Va bene, e tu?", reg:"tu"},
+    {fr:"Comment tu vas ?", it:"Come stai?", reg:"tu"},
+    {fr:"Très bien merci, et toi ?", it:"Molto bene grazie, e tu?", reg:"tu"},
+    {fr:"Pas trop bien.", it:"Non troppo bene."},
+    {fr:"Vous allez bien, monsieur / madame ?", it:"Sta bene, Signore / Signora?", reg:"vous"},
+    {fr:"Non, pas très bien, et vous ?", it:"No, non molto bene, e Lei?", reg:"vous"},
+    {fr:"Ça va mal !", it:"Va male!"},
+    {fr:"Comment ça va ?", it:"Come va?", syn:"va"},
+    {fr:"Je vais bien merci, et vous ?", it:"Sto bene grazie, e Lei?", reg:"vous"},
+    {fr:"Assez bien, merci.", it:"Abbastanza bene, grazie."}]},
+  {title:"Se présenter et présenter", it:"Presentarsi e presentare qualcuno", items:[
+    {fr:"Comment tu t'appelles ?", it:"Come ti chiami?", reg:"tu"},
+    {fr:"Je m'appelle Charlotte Fayard, et toi ?", it:"Mi chiamo Charlotte Fayard, e tu?", reg:"tu"},
+    {fr:"Moi, c'est Jules.", it:"Io sono Jules."},
+    {fr:"Je te présente Marie.", it:"Ti presento Marie.", reg:"tu"},
+    {fr:"Salut Marie !", it:"Ciao Marie!", reg:"tu"},
+    {fr:"Je vous présente Madame Darel.", it:"Le presento la Signora Darel.", reg:"vous"},
+    {fr:"Enchanté, madame !", it:"Piacere, Signora!", reg:"vous"},
+    {fr:"le prénom", it:"il nome (Charlotte, Jules, Marie)"},
+    {fr:"le nom", it:"il cognome (Fayard, Darel)"}]}
+];
+SEN.forEach(s => s.items.forEach(i => { i.html = (i.face?`<span class="face">${i.face}</span> `:"") + esc(i.fr) + tag(i.reg); }));
+SAL.forEach(s => s.items.forEach(i => { i.html = esc(i.fr); }));
+
+/* ---------- generatori di domande ---------- */
+const all = secs => secs.flatMap(s => s.items);
+const sayOf = i => i.say || i.fr;
+const rev = i => ({html:i.html||esc(i.fr), it:i.it, say:sayOf(i), cls:i.cls||""});
+function distract(pool, item, key, n=3){
+  const bad = new Set([item[key]]);
+  return shuffle(pool.filter(p => p!==item && !bad.has(p[key]) && !(item.syn && p.syn===item.syn) && !(item.word && p.word===item.word))).slice(0,n);
+}
+function translateQs(pool, n=10){
+  return shuffle(pool).slice(0,n).map((it, k) => {
+    const ds = distract(pool, it, k%2?"fr":"it");
+    if (k % 2 === 0){ // FR -> IT
+      return { prompt:`<div class="ask">Che cosa vuol dire?</div><div class="word">${it.html||esc(it.fr)}</div>${sayBtn(sayOf(it))}`, auto:sayOf(it),
+        options: shuffle([{label:esc(it.it), ok:true}, ...ds.map(d=>({label:esc(d.it)}))]), after:sayOf(it), review:rev(it) };
+    }
+    return { prompt:`<div class="ask">Come si dice in francese?</div><div class="word">${esc(it.it)}</div>`,
+      options: shuffle([{label:it.html||esc(it.fr), ok:true}, ...ds.map(d=>({label:d.html||esc(d.fr)}))]), after:sayOf(it), review:rev(it) };
+  });
+}
+const itGender = s => /^(il|lo|un) /i.test(s) ? "m" : /^(la|una) /i.test(s) ? "f" : null;
+function ununeQs(){
+  const pool = all(VOC).filter(i => i.g!=="mf" && i.word!=="élève");
+  return shuffle(pool).slice(0,12).map(i => {
+    const ig = itGender(i.it), diff = ig && ig!==i.g;
+    return { prompt:`<div class="ask">Maschile o femminile?</div><div class="word">… ${esc(i.word)}</div><div class="ask">(${esc(i.it)})</div>${sayBtn(i.word)}`,
+      layout:"two-big",
+      options:[{label:"UN", cls:"cm", ok:i.g==="m"},{label:"UNE", cls:"cf", ok:i.g==="f"}],
+      explain:`<b>${i.html}</b>${diff ? `<br>Attenzione: in italiano è ${ig==="m"?"maschile":"femminile"} (${esc(i.it)}), in francese no!` : ""}`,
+      after:i.say, review:rev(i) };
+  });
+}
+const CONFUSE = {2:[12,10],3:[13,30],4:[14],5:[15],6:[16,10],10:[6,2],12:[2,13],13:[3,30],14:[4],15:[5],16:[6],20:[30,21],30:[20,13],21:[31,20],31:[21,30]};
+function nearNums(n){
+  const c = new Set((CONFUSE[n]||[]).concat([n+1,n-1,n+10,n-10]).filter(x=>x>=0&&x<=31&&x!==n));
+  let arr = shuffle([...c]).slice(0,3);
+  while (arr.length<3){ const r=Math.random()*32|0; if (r!==n && !arr.includes(r)) arr.push(r); }
+  return arr;
+}
+function ecouteQs(){
+  return shuffle(range(0,31)).slice(0,10).map(n => ({
+    prompt:`<div class="ask">Ascolta e trova il numero</div>${sayBtn(NUM_W[n], true)}<button class="peek" data-peek="${esc(NUM_W[n])}">Aiutino: mostra la parola</button>`,
+    auto:NUM_W[n], layout:"digits",
+    options: shuffle([{label:String(n), ok:true, cls:"digit"}, ...nearNums(n).map(x=>({label:String(x), cls:"digit"}))]),
+    explain:`<b>${n}</b> = ${esc(NUM_W[n])} <span style="color:var(--muted)">· si legge: ${esc(NUM_P[n])}</span>`, after:NUM_W[n], review:rev(numItem(n)) }));
+}
+function spellWrong(n){
+  const u = NUM_W[n%10];
+  if (n===21||n===31){ const t=n===21?"vingt":"trente"; return [t+"-un", t+" un", (n===21?"trente":"vingt")+" et un"]; }
+  if (n>21 && n!==30 && n<30){ return ["vingt et "+u, "vingt "+u, NUM_W[10+n%10] && n%10<=6 ? NUM_W[10+n%10] : "dix-"+u]; }
+  if (n>=17 && n<=19){ return ["dix et "+u, "dix "+u, "vingt-"+u]; }
+  return nearNums(n).map(x=>NUM_W[x]);
+}
+function ecrisQs(){
+  const pool = shuffle(range(0,31).filter(n=>n>=11)).slice(0,6).concat(shuffle(range(0,10)).slice(0,4));
+  return shuffle(pool).map(n => ({
+    prompt:`<div class="ask">Come si scrive?</div><div class="num">${n}</div>`,
+    options: shuffle([{label:esc(NUM_W[n]), ok:true}, ...spellWrong(n).map(w=>({label:esc(w)}))]),
+    explain: n===21||n===31 ? "Per 21 e 31 si mette <b>ET</b> nel mezzo." : (n>=17 && n!==20 && n!==30) ? "Negli altri numeri composti si usa il trattino <b>-</b>." : `<b>${n}</b> = ${esc(NUM_W[n])}`,
+    after:NUM_W[n], review:rev(numItem(n)) }));
+}
+const WHEN = {arr:"Quando arrivo", dep:"Quando vado via", both:"Tutti e due"};
+function quandQs(){
+  const pool = all(SAL).filter(i=>i.when);
+  return shuffle(pool).map(i => ({
+    prompt:`<div class="ask">Lo dici quando arrivi o quando vai via?</div><div class="word">${esc(i.fr)}</div>${sayBtn(i.fr)}`, auto:i.fr, layout:"one",
+    options:["arr","dep","both"].map(k=>({label:WHEN[k], ok:i.when===k})),
+    explain: i.when==="both" ? "<b>Salut !</b> tra amici si usa sia quando arrivi, sia quando vai via." : `<b>${esc(i.fr)}</b> = ${esc(i.it)}`,
+    after:i.fr, review:rev(i) }));
+}
+const SITU = [
+  ["Sono le 8 di mattina. Entri in classe e saluti la professoressa.","Bonjour, madame !",["Salut !","Bonsoir, monsieur !"],"Con un adulto si usa Bonjour; al mattino, non Bonsoir."],
+  ["Incontri il tuo amico Paul al parco.","Salut !",["Bonjour, madame !","Bonne nuit !"],"Tra amici si dice Salut !"],
+  ["Sono le 20. Entri in pizzeria e saluti il cameriere.","Bonsoir, monsieur !",["Bonjour, madame !","Bonne journée !"],"Dalla sera in poi si usa Bonsoir."],
+  ["Vai a dormire e saluti la mamma.","Bonne nuit !",["Bonsoir, monsieur !","Bonne journée !"],"Bonne nuit augura la buonanotte."],
+  ["Esci di casa alle 8 e auguri al papà una buona giornata.","Bonne journée !",["Bonne nuit !","Bonne soirée !"],"Bonne journée = buona giornata."],
+  ["Saluti un amico: vi rivedete fra dieci minuti.","À tout à l'heure !",["Bonne nuit !","Bonjour, madame !"],"À tout à l'heure = a tra poco."],
+  ["Esci da un negozio e saluti in modo educato.","Au revoir !",["Salut !","Bonjour, madame !"],"Au revoir = arrivederci. Va bene con tutti."],
+  ["Dopo la scuola saluti la tua amica: vi vedete più tardi.","À plus !",["Bonne nuit !","Bonjour, madame !"],"À plus ! = a dopo, tra amici."],
+  ["Alle 19 esci dalla casa della nonna e le auguri una buona serata.","Bonne soirée !",["Bonne journée !","Bonne nuit !"],"Bonne soirée = buona serata."],
+  ["Sono le 15. Entri in biblioteca e saluti la bibliotecaria.","Bonjour, madame !",["Bonsoir, monsieur !","Salut !"],"Bonjour si usa al mattino e anche al pomeriggio."],
+  ["Sono le 8:00. Che momento della giornata è?","le matin",["le soir","la nuit"],"le matin = il mattino."],
+  ["Sono le 15:00. Che momento della giornata è?","l'après-midi",["le matin","la nuit"],"l'après-midi = il pomeriggio."],
+  ["Sono le 20:00. Che momento della giornata è?","le soir",["l'après-midi","le matin"],"le soir = la sera."],
+  ["Sono le 3:00 e tutti dormono. Che momento è?","la nuit",["le soir","le matin"],"la nuit = la notte."]
+];
+function situQs(){
+  return shuffle(SITU).slice(0,10).map(([s,ok,bad,ex]) => ({
+    prompt:`<div class="ask">Che cosa dici?</div><div class="sit">${esc(s)}</div>`, layout:"one",
+    options: shuffle([{label:esc(ok), ok:true}, ...bad.map(b=>({label:esc(b)}))]),
+    explain:esc(ex), after:ok, review:{html:esc(ok), it:s, say:ok} }));
+}
+function tuvousQs(){
+  const pool = all(SEN).filter(i=>i.reg);
+  return shuffle(pool).slice(0,10).map(i => ({
+    prompt:`<div class="ask">Lo dici a un amico (TU) o a un adulto (VOUS)?</div><div class="word">${esc(i.fr)}</div>${sayBtn(i.fr)}`, auto:i.fr, layout:"two-big",
+    options:[{label:"TU", cls:"cm", ok:i.reg==="tu"},{label:"VOUS", cls:"cf", ok:i.reg==="vous"}],
+    explain:`<b>${esc(i.fr)}</b> = ${esc(i.it)}<br>${i.reg==="tu" ? "Con gli amici si usa TU." : "Con adulti e professori si usa VOUS (il nostro “Lei”)."}`,
+    after:i.fr, review:rev(i) }));
+}
+function visageQs(){
+  const sc = SEN[0].items, qs = [];
+  sc.forEach(i => {
+    qs.push({ prompt:`<div class="ask">Come sta?</div><div class="num" style="font-size:5rem">${i.face}</div>`,
+      options: shuffle(sc.map(o=>({label:esc(o.fr), ok:o===i}))), layout:"one", explain:`<b>${esc(i.fr)}</b> = ${esc(i.it)}`, after:i.fr, review:rev(i) });
+    qs.push({ prompt:`<div class="ask">Quale faccina?</div><div class="word">${esc(i.fr)}</div>${sayBtn(i.fr)}`, auto:i.fr, layout:"digits",
+      options: shuffle(sc.map(o=>({label:o.face, ok:o===i, cls:"digit"}))), explain:`<b>${esc(i.fr)}</b> = ${esc(i.it)}`, after:i.fr, review:rev(i) });
+  });
+  return shuffle(qs);
+}
+
+/* ---------- argomenti ---------- */
+const TOPICS = {
+  vocabulaire:{ name:"Vocabulaire", sub:"La classe, lo zaino e le persone", tagTxt:"un<br>une", secs:VOC, cards:"gender",
+    tips:["Colore <span class='art m'>blu</span> = <b>UN</b> (maschile) · Colore <span class='art f'>rosa</span> = <b>UNE</b> (femminile).","Attenzione ai falsi amici: <b>un bureau</b> è la cattedra! <b>un stylo</b> è la penna, ed è maschile in francese!"],
+    games:[{id:"quiz",name:"Traduci",desc:"Dal francese all'italiano e viceversa",make:()=>translateQs(all(VOC))},
+           {id:"unune",name:"UN o UNE?",desc:"Maschile blu o femminile rosa",make:ununeQs}] },
+  nombres:{ name:"Les nombres", sub:"I numeri da 0 a 31", tagTxt:"31", secs:NUM, cards:"num",
+    tips:["Per <b>21</b> e <b>31</b> si mette sempre la parola <b>ET</b> nel mezzo: vingt et un, trente et un.","Per tutti gli altri numeri composti (22, 23, 24…) si usa il trattino <b>-</b>: vingt-deux, vingt-trois.","Per 20 (<b>vingt</b>) e 30 (<b>trente</b>) memorizza prima la radice!"],
+    games:[{id:"ecoute",name:"Ascolta e trova",desc:"Senti il numero e tocca la cifra",make:ecouteQs},
+           {id:"ecris",name:"Come si scrive?",desc:"Scegli la scrittura giusta",make:ecrisQs},
+           {id:"briques",name:"Mattoncini",desc:"Costruisci i numeri da 17 a 31",bricks:true}] },
+  salutations:{ name:"Les salutations", sub:"I saluti e i momenti della giornata", tagTxt:"Bon<br>jour", secs:SAL,
+    tips:["<b>Salut !</b> si usa sia per dire ciao quando arrivi, sia quando vai via (tra amici).","<b>Bonjour</b> si usa al mattino e al pomeriggio. <b>Bonsoir</b> si usa dalla sera in poi.","<b>Bonne journée / Bonne soirée / Bonne nuit</b> servono per augurare buona giornata, serata o notte quando ci si saluta."],
+    games:[{id:"quiz",name:"Traduci",desc:"Dal francese all'italiano e viceversa",make:()=>translateQs(all(SAL))},
+           {id:"situ",name:"Che cosa dici?",desc:"Scegli il saluto giusto per ogni situazione",make:situQs},
+           {id:"quand",name:"Arrivo o partenza?",desc:"Quando si usa ogni saluto",make:quandQs}] },
+  sensations:{ name:"Sensations", sub:"Come stai, presentarsi e dare del “Lei”", tagTxt:"Ça<br>va ?", secs:SEN,
+    tips:["In francese per essere formali si usa sempre <b>VOUS</b> (il nostro “Lei”).","Con gli amici si usa <b>TU</b>: Comment tu t'appelles ? · Je te présente…","Con adulti e professori si usa <b>VOUS</b>: Comment allez-vous ? · Je vous présente…","<b>Le prénom</b> è il nome (Charlotte, Jules). <b>Le nom</b> è il cognome (Fayard, Darel)."],
+    games:[{id:"quiz",name:"Traduci",desc:"Dal francese all'italiano e viceversa",make:()=>translateQs(all(SEN))},
+           {id:"tuvous",name:"TU o VOUS?",desc:"Amico o adulto?",make:tuvousQs},
+           {id:"visage",name:"Come sta?",desc:"Abbina le faccine alle parole",make:visageQs}] }
+};
+
+/* ---------- viste ---------- */
+const app = $("#app");
+let hideIt = store.get("hideIt", false);
+function header(){
+  return `<header class="top">
+    <div class="brand"><h1 data-go="">Il Quaderno di Francese<span class="fr-flag" aria-hidden="true"><i style="background:#2853c9"></i><i style="background:#fff;border:1px solid var(--line)"></i><i style="background:#e2675c"></i></span></h1>
+    <p>Ripassa le mappe, ascolta la pronuncia, gioca.</p></div>
+    <div class="toggles">
+      <button class="tog" id="t-slow" aria-pressed="${settings.slow}"><span class="dot"></span>Voce lenta</button>
+      <button class="tog" id="t-big" aria-pressed="${settings.big}"><span class="dot"></span>Testo grande</button>
+    </div></header>`;
+}
+function bindHeader(){
+  $("#t-slow").onclick = () => { settings.slow=!settings.slow; store.set("settings",settings); $("#t-slow").setAttribute("aria-pressed",settings.slow); speak("Bonjour !"); };
+  $("#t-big").onclick = () => { settings.big=!settings.big; store.set("settings",settings); document.documentElement.classList.toggle("big",settings.big); $("#t-big").setAttribute("aria-pressed",settings.big); };
+  app.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(b.dataset.go));
+}
+function go(h){ if (h) location.hash = h; else history.pushState("", "", location.pathname + location.search); route(); }
+
+function home(){
+  const cards = Object.entries(TOPICS).map(([k,t]) => {
+    const n = all(t.secs).length;
+    const best = Math.max(0, ...t.games.map(g => store.get(`best_${k}_${g.id}`, 0)));
+    return `<button class="topic" data-go="${k}"><span class="tag">${t.tagTxt}</span><h2>${t.name}</h2><span class="sub">${t.sub}</span>
+      <span class="meta">${n} parole · ${t.games.length} giochi ${best?starsHTML(best,true):""}</span></button>`;
+  }).join("");
+  app.innerHTML = header() + `<div class="intro">${sayBtn("Bonjour ! On révise le français ?")}<p>Scegli una mappa. Tocca il pulsante blu con l'altoparlante per sentire come si pronuncia ogni parola.</p></div><div class="topics">${cards}</div>`;
+  bindHeader();
+}
+
+function cardHTML(i, kind){
+  if (kind==="num") return `<div class="card"><div><span class="big">${i.n}</span></div><div class="fr">${esc(i.fr)}</div><div class="hint">si legge: <b>${esc(i.hint)}</b></div>${sayBtn(i.say)}</div>`;
+  return `<div class="card ${i.cls||""}"><div class="fr">${i.html||esc(i.fr)}</div><div class="it">${esc(i.it)}</div>${i.hint?`<div class="hint">${esc(i.hint)}</div>`:""}${sayBtn(sayOf(i))}</div>`;
+}
+function topicView(k){
+  const t = TOPICS[k];
+  const games = t.games.map(g => `<button class="game" data-game="${g.id}"><b>${g.name}</b><span>${g.desc}</span><span class="best">${starsHTML(store.get(`best_${k}_${g.id}`,0),true)}</span></button>`).join("");
+  const secs = t.secs.map(s => `<section class="sec"><h3>${esc(s.title)} <small>${esc(s.it)}</small></h3><div class="cards">${s.items.map(i=>cardHTML(i,t.cards)).join("")}</div></section>`).join("");
+  app.innerHTML = header() + `<button class="back" data-go="">← Tutte le mappe</button>
+    <div class="head"><h2>${t.name}</h2><p>${t.sub}</p></div>
+    <div class="games">${games}</div>
+    <div class="sheet ${hideIt && t.cards!=="num"?"hideit":""}" id="sheet">
+      <div class="sheet-bar"><h3 style="font-size:1.4rem">La mappa</h3>${t.cards!=="num"?`<button class="tog" id="t-hide" aria-pressed="${hideIt}"><span class="dot"></span>Nascondi l'italiano</button>`:""}</div>
+      ${secs}
+      <div class="tips"><h3>Ricorda per l'interrogazione</h3><ul>${t.tips.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    </div>`;
+  bindHeader();
+  const th = $("#t-hide");
+  if (th) th.onclick = () => { hideIt=!hideIt; store.set("hideIt",hideIt); th.setAttribute("aria-pressed",hideIt); $("#sheet").classList.toggle("hideit",hideIt); };
+  $("#sheet").addEventListener("click", e => { const it = e.target.closest(".it"); if (it) it.classList.toggle("show"); });
+  app.querySelectorAll("[data-game]").forEach(b => b.onclick = () => {
+    const g = t.games.find(x=>x.id===b.dataset.game);
+    g.bricks ? runBricks(k, g) : runQuiz(k, g, g.make());
+  });
+  window.scrollTo(0,0);
+}
+
+/* ---------- motore quiz ---------- */
+function runQuiz(k, g, qs, retry){
+  let i = 0, score = 0; const res = [], wrong = [];
+  const shell = () => header() + `<button class="back" id="back">← Torna alla mappa</button><div class="runner" id="run"></div>`;
+  app.innerHTML = shell(); bindHeader(); $("#back").onclick = () => topicView(k);
+  const run = $("#run");
+  function dots(){ return `<div class="dots">${qs.map((_,j)=>`<i class="${res[j]===true?"ok":res[j]===false?"ko":""} ${j===i?"now":""}"></i>`).join("")}</div>`; }
+  function show(){
+    const q = qs[i];
+    run.innerHTML = `<div class="runner-top"><h3>${g.name}${retry?" · ripasso errori":""}</h3>${dots()}</div>
+      <div class="q">${q.prompt}</div>
+      <div class="opts ${q.layout==="one"?"one":q.layout==="two-big"?"two-big":""}">${q.options.map((o,j)=>`<button class="opt ${o.cls||""}" data-j="${j}">${o.label}</button>`).join("")}</div>
+      <div id="fbx"></div>`;
+    if (q.auto) speak(q.auto);
+    const pk = run.querySelector("[data-peek]"); if (pk) pk.onclick = () => { pk.outerHTML = `<div class="word">${pk.dataset.peek}</div>`; };
+    run.querySelectorAll(".opt").forEach(b => b.onclick = () => answer(+b.dataset.j));
+    run.querySelector(".opt").focus({preventScroll:true});
+  }
+  function answer(j){
+    const q = qs[i], ok = !!q.options[j].ok, btns = run.querySelectorAll(".opt");
+    btns.forEach((b,x) => { b.disabled = true; if (q.options[x].ok) b.classList.add("right"); });
+    if (!ok) btns[j].classList.add("wrong");
+    res[i] = ok; if (ok) score++; else wrong.push(q);
+    const right = q.options.find(o=>o.ok).label;
+    $("#fbx").innerHTML = `<div class="fb ${ok?"ok":"ko"}"><div class="msg"><b class="t">${ok?["Bravo !","Super !","Très bien !","Parfait !"][Math.random()*4|0]:"Quasi! La risposta giusta è: "+right}</b>${q.explain?`<div>${q.explain}</div>`:""}</div>${q.after?sayBtn(q.after):""}</div>
+      <div class="row" style="margin-top:14px"><button class="primary" id="next">${i<qs.length-1?"Avanti →":"Vedi il risultato"}</button></div>`;
+    run.querySelector(".dots").outerHTML = dots();
+    if (q.after) speak(q.after);
+    const nx = $("#next"); nx.focus({preventScroll:true});
+    nx.onclick = () => { i++; i<qs.length ? show() : end(); };
+  }
+  function end(){
+    const st = starCount(score, qs.length);
+    if (!retry) store.set(`best_${k}_${g.id}`, Math.max(st, store.get(`best_${k}_${g.id}`,0)));
+    const msg = st===3?"Fantastique !":st===2?"Très bien !":st===1?"Bien ! Continua così.":"Ripassiamo insieme e riprova!";
+    run.innerHTML = `<div class="end"><h3>${msg}</h3>${starsHTML(st)}<p style="margin:0">Hai risposto giusto a <b>${score}</b> domande su <b>${qs.length}</b>.</p>
+      ${wrong.length?`<div class="mist"><h3 style="font-size:1.2rem">Da ripassare</h3>${uniq(wrong.map(w=>w.review)).map(r=>`<div class="card ${r.cls||""}"><div class="fr">${r.html}</div><div class="it">${esc(r.it)}</div>${sayBtn(r.say)}</div>`).join("")}</div>`:""}
+      <div class="row">${wrong.length?`<button class="primary" id="redo">Riprova gli errori</button>`:""}<button class="${wrong.length?"ghost":"primary"}" id="again">Gioca ancora</button><button class="ghost" id="map">Torna alla mappa</button></div></div>`;
+    if (wrong.length) $("#redo").onclick = () => runQuiz(k, g, shuffle(wrong).map(q => ({...q, options:shuffle(q.layout==="two-big"?q.options:q.options)})), true);
+    $("#again").onclick = () => runQuiz(k, g, g.make());
+    $("#map").onclick = () => topicView(k);
+  }
+  const uniq = arr => { const s=new Set(); return arr.filter(r => !s.has(r.html+r.it) && s.add(r.html+r.it)); };
+  show(); window.scrollTo(0,0);
+}
+
+/* ---------- mattoncini (numeri composti) ---------- */
+const UNITS = ["","un","deux","trois","quatre","cinq","six","sept","huit","neuf"];
+function parts(n){
+  if (n<=16 || n===20 || n===30) return [NUM_W[n]];
+  if (n<20) return ["dix","-",UNITS[n-10]];
+  const t = n<30 ? "vingt" : "trente";
+  return n%10===1 ? [t,"et","un"] : [t,"-",UNITS[n%10]];
+}
+const joinParts = p => p.reduce((s,t,i) => i===0 ? t : (t==="-"||p[i-1]==="-") ? s+t : s+" "+t, "");
+function runBricks(k, g){
+  const qs = shuffle(range(17,31)).slice(0,8);
+  let i = 0, score = 0, tried = false; const res = [], wrong = [];
+  app.innerHTML = header() + `<button class="back" id="back">← Torna alla mappa</button><div class="runner" id="run"></div>`;
+  bindHeader(); $("#back").onclick = () => topicView(k);
+  const run = $("#run");
+  let built = [], pool = [];
+  const dots = () => `<div class="dots">${qs.map((_,j)=>`<i class="${res[j]===true?"ok":res[j]===false?"ko":""} ${j===i?"now":""}"></i>`).join("")}</div>`;
+  function show(){
+    const n = qs[i]; tried = false; built = [];
+    const need = parts(n);
+    const extra = shuffle(UNITS.slice(1).filter(u=>!need.includes(u))).slice(0,2);
+    pool = shuffle([...new Set([...need, "-", "et", "vingt", "trente", "dix", ...extra])]).map((t,id)=>({t,id,used:false}));
+    run.innerHTML = `<div class="runner-top"><h3>${g.name}</h3>${dots()}</div>
+      <div class="q"><div class="ask">Costruisci il numero</div><div class="num">${n}</div>${sayBtn(NUM_W[n])}</div>
+      <div class="preview" id="pv"></div>
+      <div class="build" id="bd"></div>
+      <div class="pool" id="pl"></div>
+      <div class="row"><button class="ghost" id="clr">Cancella</button><button class="primary" id="chk">Controlla</button></div>
+      <div id="fbx"></div>`;
+    $("#clr").onclick = () => { built=[]; pool.forEach(p=>p.used=false); draw(); };
+    $("#chk").onclick = check;
+    draw();
+  }
+  function draw(){
+    $("#bd").innerHTML = built.map((p,j)=>`<button class="brick ${p.t==="-"||p.t==="et"?"sym":""}" data-b="${j}">${esc(p.t)}</button>`).join("");
+    $("#pl").innerHTML = pool.map(p=>`<button class="brick ${p.t==="-"||p.t==="et"?"sym":""}" data-p="${p.id}" ${p.used?"disabled":""}>${esc(p.t)}</button>`).join("");
+    $("#pv").textContent = joinParts(built.map(p=>p.t));
+    $("#bd").querySelectorAll("[data-b]").forEach(b => b.onclick = () => { const p = built.splice(+b.dataset.b,1)[0]; p.used=false; $("#bd").className="build"; draw(); });
+    $("#pl").querySelectorAll("[data-p]").forEach(b => b.onclick = () => { const p = pool.find(x=>x.id==b.dataset.p); p.used=true; built.push(p); $("#bd").className="build"; draw(); });
+  }
+  function check(){
+    const n = qs[i], need = parts(n), got = built.map(p=>p.t);
+    if (!got.length) return;
+    const ok = got.join("|")===need.join("|");
+    $("#bd").className = "build " + (ok?"ok":"ko");
+    if (ok){
+      if (res[i]===undefined){ res[i]=true; score++; }
+      speak(NUM_W[n]);
+      $("#fbx").innerHTML = `<div class="fb ok"><div class="msg"><b class="t">Parfait !</b><div><b>${n}</b> = ${esc(NUM_W[n])}</div></div>${sayBtn(NUM_W[n])}</div><div class="row" style="margin-top:14px"><button class="primary" id="next">${i<qs.length-1?"Avanti →":"Vedi il risultato"}</button></div>`;
+      run.querySelectorAll(".pool .brick, .build .brick, #clr, #chk").forEach(b=>b.disabled=true);
+      run.querySelector(".dots").outerHTML = dots();
+      $("#next").onclick = () => { i++; i<qs.length ? show() : end(); };
+      $("#next").focus({preventScroll:true});
+    } else {
+      if (res[i]===undefined){ res[i]=false; wrong.push(n); run.querySelector(".dots").outerHTML = dots(); }
+      const rule = (n===21||n===31) ? "Per 21 e 31 si mette ET nel mezzo." : "Qui si usa il trattino - (non ET).";
+      $("#fbx").innerHTML = `<div class="fb ko"><div class="msg"><b class="t">Riprova!</b><div>${rule} Si scrive: <b>${esc(NUM_W[n])}</b></div></div>${sayBtn(NUM_W[n])}</div>`;
+    }
+  }
+  function end(){
+    const st = starCount(score, qs.length);
+    store.set(`best_${k}_${g.id}`, Math.max(st, store.get(`best_${k}_${g.id}`,0)));
+    run.innerHTML = `<div class="end"><h3>${st>=2?"Très bien !":"Bien ! Continua così."}</h3>${starsHTML(st)}<p style="margin:0">Numeri costruiti al primo colpo: <b>${score}</b> su <b>${qs.length}</b>.</p>
+      ${wrong.length?`<div class="mist"><h3 style="font-size:1.2rem">Da ripassare</h3>${wrong.map(n=>cardHTML(numItem(n),"num")).join("")}</div>`:""}
+      <div class="row"><button class="primary" id="again">Gioca ancora</button><button class="ghost" id="map">Torna alla mappa</button></div></div>`;
+    $("#again").onclick = () => runBricks(k, g);
+    $("#map").onclick = () => topicView(k);
+  }
+  show(); window.scrollTo(0,0);
+}
+
+/* ---------- avvio ---------- */
+function route(){ const h = location.hash.slice(1); TOPICS[h] ? topicView(h) : home(); }
+document.documentElement.classList.toggle("big", !!settings.big);
+window.addEventListener("hashchange", route);
+route();
+</script>
+
+</body></html>
